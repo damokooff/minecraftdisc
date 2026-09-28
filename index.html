@@ -5,20 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Juke-box Minecraft</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
-  <h1>🎵 Juke-box Minecraft</h1>
+  <header>
+    <h1>🎵 Juke-box Minecraft</h1>
+  </header>
 
-  <div id="loading">Chargement des disques...</div>
-  <div id="jukebox" class="jukebox"></div>
+  <main class="app">
+    <!-- Panneau gauche : lecteur -->
+    <section class="player-panel">
+      <div class="now-playing">
+        <div class="disc-big" id="disc-big">
+          <div class="disc-hole"></div>
+        </div>
+        <div class="track-info">
+          <p class="label">EN LECTURE</p>
+          <h2 id="track-title">Aucune musique</h2>
+          <p id="track-status" class="status">Choisis un disque ou lance l'aléatoire</p>
+        </div>
+      </div>
 
-  <div class="player">
-    <audio id="audio" controls></audio>
-    <p id="nowplaying">Aucun disque en lecture</p>
-  </div>
+      <div class="controls">
+        <button id="btn-shuffle" class="btn-icon" title="Aléatoire">🔀</button>
+        <button id="btn-prev" class="btn-icon" title="Précédent">⏮</button>
+        <button id="btn-play" class="btn-play" title="Lecture / Pause">▶</button>
+        <button id="btn-next" class="btn-icon" title="Suivant">⏭</button>
+        <button id="btn-loop" class="btn-icon" title="Répéter">🔁</button>
+      </div>
 
-  <script src="music-list.js?v=5"></script>
-  <script src="script.js?v=5"></script>
+      <audio id="audio"></audio>
+    </section>
+
+    <!-- Panneau droit : playlist -->
+    <aside class="playlist-panel">
+      <div class="playlist-header">
+        <h2>Playlist</h2>
+        <span id="track-count" class="count">0 disques</span>
+      </div>
+      <ul id="playlist" class="playlist"></ul>
+    </aside>
+  </main>
+
+  <script src="music-list.js?v=6"></script>
+  <script src="script.js?v=6"></script>
 </body>
 </html>
