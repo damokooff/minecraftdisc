@@ -5,49 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Juke-box Minecraft</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
+
   <header>
     <h1>🎵 Juke-box Minecraft</h1>
   </header>
 
-  <main class="app">
-    <!-- Panneau gauche : lecteur -->
-    <section class="player-panel">
-      <div class="now-playing">
-        <div class="disc-big" id="disc-big">
-          <div class="disc-hole"></div>
-        </div>
-        <div class="track-info">
-          <p class="label">EN LECTURE</p>
-          <h2 id="track-title">Aucune musique</h2>
-          <p id="track-status" class="status">Choisis un disque ou lance l'aléatoire</p>
-        </div>
+  <!-- Grille de tous les disques -->
+  <section class="discs-section">
+    <div id="jukebox" class="jukebox"></div>
+  </section>
+
+  <!-- Playlist en bas -->
+  <section class="playlist-section">
+    <h2>Playlist</h2>
+    <ul id="playlist" class="playlist"></ul>
+  </section>
+
+  <!-- Barre de lecture fixe en bas -->
+  <div class="player-bar">
+    <div class="player-info">
+      <div class="mini-disc" id="mini-disc"></div>
+      <div class="player-text">
+        <p class="player-label">EN LECTURE</p>
+        <p id="track-title" class="player-title">Aucune musique</p>
       </div>
+    </div>
 
-      <div class="controls">
-        <button id="btn-shuffle" class="btn-icon" title="Aléatoire">🔀</button>
-        <button id="btn-prev" class="btn-icon" title="Précédent">⏮</button>
-        <button id="btn-play" class="btn-play" title="Lecture / Pause">▶</button>
-        <button id="btn-next" class="btn-icon" title="Suivant">⏭</button>
-        <button id="btn-loop" class="btn-icon" title="Répéter">🔁</button>
-      </div>
+    <div class="player-controls">
+      <button id="btn-shuffle" class="btn-icon" title="Aléatoire">🔀</button>
+      <button id="btn-prev" class="btn-icon" title="Précédent">⏮</button>
+      <button id="btn-play" class="btn-play" title="Lecture / Pause">▶</button>
+      <button id="btn-next" class="btn-icon" title="Suivant">⏭</button>
+      <button id="btn-loop" class="btn-icon" title="Répéter">🔁</button>
+    </div>
 
-      <audio id="audio"></audio>
-    </section>
+    <div class="player-progress">
+      <span id="time-current">0:00</span>
+      <input type="range" id="progress" min="0" max="100" value="0" step="0.1">
+      <span id="time-total">0:00</span>
+    </div>
+  </div>
 
-    <!-- Panneau droit : playlist -->
-    <aside class="playlist-panel">
-      <div class="playlist-header">
-        <h2>Playlist</h2>
-        <span id="track-count" class="count">0 disques</span>
-      </div>
-      <ul id="playlist" class="playlist"></ul>
-    </aside>
-  </main>
+  <audio id="audio"></audio>
 
-  <script src="music-list.js?v=6"></script>
-  <script src="script.js?v=6"></script>
+  <script src="music-list.js?v=7"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
