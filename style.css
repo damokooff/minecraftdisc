@@ -1,101 +1,117 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: #1a1a1a;
-  color: #fff;
-  font-family: 'Courier New', monospace;
-  text-align: center;
   margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%);
+  color: #e8e8e8;
+  font-family: 'Segoe UI', 'Courier New', monospace;
   padding: 20px;
 }
 
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 h1 {
-  color: #0f0;
-  text-shadow: 2px 2px 0 #000;
+  color: #4fd63c;
+  text-shadow: 0 0 10px rgba(79, 214, 60, 0.5), 2px 2px 0 #000;
+  font-size: 32px;
+  margin: 0;
+  letter-spacing: 2px;
 }
 
-.jukebox {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+/* Layout principal : 2 colonnes */
+.app {
+  display: grid;
+  grid-template-columns: 1fr 380px;
   gap: 25px;
-  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.disc-wrapper {
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Panneau lecteur ---------- */
+.player-panel {
+  background: rgba(20, 20, 35, 0.8);
+  border: 2px solid #2a2a45;
+  border-radius: 16px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* Le disque lui-même */
-.disc {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.2s, box-shadow 0.2s;
+.now-playing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
 
-  /* Vinyle noir avec un centre coloré */
+.disc-big {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  position: relative;
   background:
     radial-gradient(circle at center,
-      var(--disc-light) 0%,
-      var(--disc-color) 18%,
-      var(--disc-color) 28%,
-      var(--disc-dark) 32%,
+      var(--disc-light, #a0a0a0) 0%,
+      var(--disc-color, #5a5a5a) 18%,
+      var(--disc-color, #5a5a5a) 28%,
+      var(--disc-dark, #1a1a1a) 32%,
       #1a1a1a 36%,
       #0a0a0a 100%
     );
-
-  border: 3px solid #000;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-  image-rendering: pixelated;
+  border: 4px solid #000;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
 }
 
-.disc::before {
+.disc-big::before {
   content: "";
   position: absolute;
-  inset: 18px;
+  inset: 30px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  pointer-events: none;
 }
 
-.disc::after {
+.disc-big::after {
   content: "";
   position: absolute;
-  inset: 34px;
+  inset: 55px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  pointer-events: none;
 }
 
-.disc-hole {
+.disc-big .disc-hole {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 14px;
-  height: 14px;
+  width: 24px;
+  height: 24px;
   background: #000;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  border: 2px solid #1a1a1a;
+  border: 3px solid #1a1a1a;
   z-index: 2;
 }
 
-.disc:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 20px var(--disc-light);
-}
-
-.disc.playing {
+.disc-big.playing {
   animation: spin 2s linear infinite;
-  box-shadow: 0 0 25px var(--disc-light);
 }
 
-.disc.paused {
+.disc-big.paused {
   animation: none;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
   opacity: 0.85;
 }
 
@@ -104,33 +120,185 @@ h1 {
   to { transform: rotate(360deg); }
 }
 
-/* Nom du disque sous chaque vinyle */
-.disc-label {
-  font-size: 13px;
-  color: #ccc;
-  margin: 0;
+.track-info {
   text-align: center;
-  max-width: 120px;
-  word-wrap: break-word;
 }
 
-/* Lecteur audio en bas */
-.player {
-  margin-top: 30px;
+.track-info .label {
+  color: #4fd63c;
+  font-size: 11px;
+  letter-spacing: 3px;
+  margin: 0 0 8px 0;
+  opacity: 0.8;
 }
 
-audio {
-  width: 60%;
-  filter: invert(1) hue-rotate(90deg);
+.track-info h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #fff;
 }
 
-#nowplaying {
-  margin-top: 10px;
-  color: #0f0;
-  font-size: 16px;
+.track-info .status {
+  color: #888;
+  font-size: 13px;
+  margin: 8px 0 0 0;
 }
 
-#loading {
-  color: #0f0;
+/* ---------- Contrôles ---------- */
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-icon, .btn-play {
+  background: #2a2a45;
+  color: #e8e8e8;
+  border: 2px solid #3a3a5a;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon {
+  width: 50px;
+  height: 50px;
   font-size: 18px;
+}
+
+.btn-play {
+  width: 70px;
+  height: 70px;
+  font-size: 26px;
+  background: #4fd63c;
+  color: #0f0f1a;
+  border-color: #4fd63c;
+  box-shadow: 0 0 20px rgba(79, 214, 60, 0.4);
+}
+
+.btn-icon:hover {
+  background: #3a3a5a;
+  transform: scale(1.05);
+}
+
+.btn-play:hover {
+  background: #6fe85c;
+  transform: scale(1.05);
+}
+
+.btn-icon.active {
+  background: #4fd63c;
+  color: #0f0f1a;
+  border-color: #4fd63c;
+  box-shadow: 0 0 15px rgba(79, 214, 60, 0.5);
+}
+
+/* ---------- Panneau playlist ---------- */
+.playlist-panel {
+  background: rgba(20, 20, 35, 0.8);
+  border: 2px solid #2a2a45;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  max-height: 700px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #2a2a45;
+}
+
+.playlist-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #4fd63c;
+  letter-spacing: 2px;
+}
+
+.playlist-header .count {
+  font-size: 12px;
+  color: #888;
+}
+
+.playlist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.playlist::-webkit-scrollbar {
+  width: 8px;
+}
+
+.playlist::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+.playlist::-webkit-scrollbar-thumb {
+  background: #3a3a5a;
+  border-radius: 4px;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.playlist-item:hover {
+  background: #2a2a45;
+}
+
+.playlist-item.active {
+  background: #2a3a2a;
+  border-left: 3px solid #4fd63c;
+}
+
+.mini-disc {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background:
+    radial-gradient(circle at center,
+      var(--disc-light) 0%,
+      var(--disc-color) 30%,
+      var(--disc-dark) 45%,
+      #0a0a0a 55%,
+      #0a0a0a 100%
+    );
+  border: 2px solid #000;
+}
+
+.playlist-title {
+  flex: 1;
+  font-size: 14px;
+  color: #e8e8e8;
+}
+
+.playlist-icon {
+  color: #4fd63c;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.playlist-item:hover .playlist-icon,
+.playlist-item.active .playlist-icon {
+  opacity: 1;
 }
