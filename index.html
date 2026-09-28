@@ -2,11 +2,14 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Juke-box Minecraft</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
   <h1>🎵 Juke-box Minecraft</h1>
+
   <div id="loading">Chargement des disques...</div>
   <div id="jukebox" class="jukebox"></div>
 
@@ -15,9 +18,7 @@
     <p id="nowplaying">Aucun disque en lecture</p>
   </div>
 
-  <!-- Bibliothèque pour lire les tags ID3 -->
-  <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.5/dist/jsmediatags.min.js"></script>
-  <script src="music-list.js"></script>
-  <script src="script.js"></script>
+  <script src="music-list.js?v=2"></script>
+  <script src="script.js?v=2"></script>
 </body>
 </html>
