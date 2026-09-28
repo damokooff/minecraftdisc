@@ -1,0 +1,69 @@
+body {
+  background: #1a1a1a;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+.jukebox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  padding: 30px;
+}
+
+.disc {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #111;
+  border: 4px solid #555;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.disc img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-cover {
+  font-size: 40px;
+}
+
+.disc:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #0f0;
+}
+
+.disc.playing {
+  animation: spin 2s linear infinite;
+  box-shadow: 0 0 25px #0f0;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.player {
+  margin-top: 30px;
+}
+
+audio {
+  width: 60%;
+  filter: invert(1) hue-rotate(90deg);
+}
+
+#loading {
+  color: #0f0;
+  font-size: 18px;
+}
