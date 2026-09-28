@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Juke-box Minecraft</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🎵 Juke-box Minecraft</h1>
+  <div id="loading">Chargement des disques...</div>
+  <div id="jukebox" class="jukebox"></div>
+
+  <div class="player">
+    <audio id="audio" controls></audio>
+    <p id="nowplaying">Aucun disque en lecture</p>
+  </div>
+
+  <!-- Bibliothèque pour lire les tags ID3 -->
+  <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.5/dist/jsmediatags.min.js"></script>
+  <script src="music-list.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
