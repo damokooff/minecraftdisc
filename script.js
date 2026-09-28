@@ -1,9 +1,11 @@
 const audio = document.getElementById('audio');
+const jukebox = document.getElementById('jukebox');
 const playlistEl = document.getElementById('playlist');
 const trackTitle = document.getElementById('track-title');
-const trackStatus = document.getElementById('track-status');
-const trackCount = document.getElementById('track-count');
-const discBig = document.getElementById('disc-big');
+const miniDisc = document.getElementById('mini-disc');
+const progress = document.getElementById('progress');
+const timeCurrent = document.getElementById('time-current');
+const timeTotal = document.getElementById('time-total');
 
 const btnPlay = document.getElementById('btn-play');
 const btnNext = document.getElementById('btn-next');
@@ -27,7 +29,6 @@ const COULEURS_DISQUES = {
   "Wait":             { base: "#5ba8e8", dark: "#1e1e1e", light: "#a8d4ff" },
   "Otherside":        { base: "#3aa8b0", dark: "#1a1a1a", light: "#8ce0e8" },
   "Five":             { base: "#3aa8a0", dark: "#1a1a1a", light: "#8ce0d8" },
-  "Pigstep":          { base: "#b84028", dark: "#3a1a10", light: "#ff8a5a" },
   "Pistep":           { base: "#b84028", dark: "#3a1a10", light: "#ff8a5a" },
   "Relic":            { base: "#5ab8d8", dark: "#2a4a5a", light: "#a8e0f0" },
   "Creator":          { base: "#4fd68a", dark: "#1e3a2a", light: "#a8f7c8" },
@@ -51,10 +52,39 @@ function appliquerCouleurs(element, titre) {
   element.style.setProperty('--disc-light', c.light);
 }
 
-// ---------- État du lecteur ----------
+// ---------- État ----------
 let currentIndex = -1;
-let isShuffle = true;   // Aléatoire par défaut
-let isLooping = false;  // Répéter une seule piste
+let isShuffle = true;
+let isLooping = false;
+
+// ---------- Construction de la grille de disques ----------
+function construireGrille() {
+  jukebox.innerHTML = '';
+  MUSIC_FILES.forEach((musique, index) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'disc-wrapper';
+
+    const disc = document.createElement('div');
+    disc.className = 'disc';
+    disc.title = musique.title;
+    appliquerCouleurs(disc, musique.title);
+    disc.innerHTML = `<div class="disc-hole"></div>`;
+
+    const label = document.createElement('p');
+    label.className = 'disc-label';
+    label.textContent = musique.title;
+
+    disc.addEventListener('click', () => {
+      isShuffle = false;
+      updateShuffleButton();
+      jouerIndex(index);
+    });
+
+    wrapper.appendChild(disc);
+    wrapper.appendChild(label);
+    jukebox.appendChild(wrapper);
+  });
+}
 
 // ---------- Construction de la playlist ----------
 function construirePlaylist() {
@@ -64,24 +94,18 @@ function construirePlaylist() {
     li.className = 'playlist-item';
     li.dataset.index = index;
 
-    const disc = document.createElement('div');
-    disc.className = 'mini-disc';
-    appliquerCouleurs(disc, musique.title);
+    const mini = document.createElement('div');
+    mini.className = 'playlist-mini-disc';
+    appliquerCouleurs(mini, musique.title);
 
     const titre = document.createElement('span');
     titre.className = 'playlist-title';
     titre.textContent = musique.title;
 
-    const icon = document.createElement('span');
-    icon.className = 'playlist-icon';
-    icon.textContent = '▶';
-
-    li.appendChild(disc);
+    li.appendChild(mini);
     li.appendChild(titre);
-    li.appendChild(icon);
 
     li.addEventListener('click', () => {
-      // Quand on clique sur un disque, on désactive le shuffle pour jouer ce morceau précis
       isShuffle = false;
       updateShuffleButton();
       jouerIndex(index);
@@ -89,8 +113,6 @@ function construirePlaylist() {
 
     playlistEl.appendChild(li);
   });
-
-  trackCount.textContent = `${MUSIC_FILES.length} disques`;
 }
 
 // ---------- Lecture ----------
@@ -104,18 +126,18 @@ function jouerIndex(index) {
   audio.play();
 
   trackTitle.textContent = musique.title;
-  trackStatus.textContent = `Lecture en cours...`;
-  appliquerCouleurs(discBig, musique.title);
-  discBig.classList.add('playing');
+  appliquerCouleurs(miniDisc, musique.title);
 
-  // Met en évidence l'item de la playlist
-  document.querySelectorAll('.playlist-item').forEach(item => {
-    item.classList.toggle('active', Number(item.dataset.index) === index);
+  // Mise en évidence dans la grille et la playlist
+  document.querySelectorAll('.disc').forEach((d, i) => {
+    d.classList.toggle('playing', i === index);
+  });
+  document.querySelectorAll('.playlist-item').forEach((item, i) => {
+    item.classList.toggle('active', i === index);
   });
 }
 
 function togglePlay() {
-  // Si rien n'est en cours, on démarre en aléatoire
   if (currentIndex === -1) {
     const index = isShuffle
       ? Math.floor(Math.random() * MUSIC_FILES.length)
@@ -133,7 +155,6 @@ function togglePlay() {
 
 function jouerSuivant() {
   if (MUSIC_FILES.length === 0) return;
-
   let nextIndex;
   if (isShuffle) {
     do {
@@ -147,7 +168,6 @@ function jouerSuivant() {
 
 function jouerPrecedent() {
   if (MUSIC_FILES.length === 0) return;
-
   let prevIndex;
   if (isShuffle) {
     do {
@@ -159,7 +179,7 @@ function jouerPrecedent() {
   jouerIndex(prevIndex);
 }
 
-// ---------- Mise à jour des boutons ----------
+// ---------- Mise à jour UI ----------
 function updatePlayButton() {
   btnPlay.textContent = audio.paused ? '▶' : '⏸';
 }
@@ -172,16 +192,21 @@ function updateLoopButton() {
   btnLoop.classList.toggle('active', isLooping);
 }
 
+function formatTime(sec) {
+  if (isNaN(sec)) return '0:00';
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
 // ---------- Événements ----------
 btnPlay.addEventListener('click', togglePlay);
 btnNext.addEventListener('click', jouerSuivant);
 btnPrev.addEventListener('click', jouerPrecedent);
-
 btnShuffle.addEventListener('click', () => {
   isShuffle = !isShuffle;
   updateShuffleButton();
 });
-
 btnLoop.addEventListener('click', () => {
   isLooping = !isLooping;
   updateLoopButton();
@@ -189,16 +214,14 @@ btnLoop.addEventListener('click', () => {
 
 audio.addEventListener('play', () => {
   updatePlayButton();
-  discBig.classList.add('playing');
-  discBig.classList.remove('paused');
-  trackStatus.textContent = 'Lecture en cours...';
+  miniDisc.classList.add('playing');
+  miniDisc.classList.remove('paused');
 });
 
 audio.addEventListener('pause', () => {
   updatePlayButton();
-  discBig.classList.remove('playing');
-  discBig.classList.add('paused');
-  trackStatus.textContent = 'En pause';
+  miniDisc.classList.remove('playing');
+  miniDisc.classList.add('paused');
 });
 
 audio.addEventListener('ended', () => {
@@ -210,13 +233,26 @@ audio.addEventListener('ended', () => {
   }
 });
 
-// ---------- Initialisation ----------
+audio.addEventListener('loadedmetadata', () => {
+  timeTotal.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener('timeupdate', () => {
+  if (audio.duration) {
+    progress.value = (audio.currentTime / audio.duration) * 100;
+    timeCurrent.textContent = formatTime(audio.currentTime);
+  }
+});
+
+progress.addEventListener('input', () => {
+  if (audio.duration) {
+    audio.currentTime = (progress.value / 100) * audio.duration;
+  }
+});
+
+// ---------- Init ----------
+construireGrille();
 construirePlaylist();
 updateShuffleButton();
 updatePlayButton();
 updateLoopButton();
-
-// Lancement automatique en aléatoire après un petit délai
-// (nécessaire car les navigateurs bloquent l'autoplay sans interaction)
-// On laisse l'utilisateur cliquer sur Play pour démarrer.
-trackStatus.textContent = 'Clique sur ▶ pour lancer la lecture aléatoire';
