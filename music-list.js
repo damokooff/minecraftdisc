@@ -1,8 +1,26 @@
-// Liste simplement les chemins de tes MP3 ici
+// Liste des musiques hébergées sur Catbox
 const MUSIC_FILES = [
-  "music/cat.mp3",
-  "music/blocks.mp3",
-  "music/chirp.mp3",
-  "music/strad.mp3",
-  // Ajoute autant de lignes que nécessaire
+  { title: "Bounce",           file: "https://files.catbox.moe/qbxwke.mp3" },
+  { title: "Precipice",        file: "https://files.catbox.moe/a1jvp5.mp3" },
+  { title: "Tears",            file: "https://files.catbox.moe/uts7xr.mp3" },
+  { title: "Lava Chicken",     file: "https://files.catbox.moe/2lrgor.mp3" },
+  { title: "Creator",          file: "https://files.catbox.moe/9f5sif.mp3" },
+  { title: "Relic",            file: "https://files.catbox.moe/nco7xz.mp3" },
+  { title: "Otherside",        file: "https://files.catbox.moe/0jvjg7.mp3" },
+  { title: "Wait",             file: "https://files.catbox.moe/ndve5e.mp3" },
+  { title: "Crator Music Box", file: "https://files.catbox.moe/nsk5jv.mp3" },
+  { title: "Pistep",           file: "https://files.catbox.moe/4aia7d.mp3" },
+  { title: "Five",             file: "https://files.catbox.moe/do0syw.mp3" },
+  { title: "Ward",             file: "https://files.catbox.moe/i7ldsg.mp3" },
+  { title: "Strad",            file: "https://files.catbox.moe/6y0gkp.mp3" },
+  { title: "Eleven",           file: "https://files.catbox.moe/ltvhzl.mp3" },
+  { title: "Stal",             file: "https://files.catbox.moe/q27l5t.mp3" },
+  { title: "Mall",             file: "https://files.catbox.moe/26mt9x.mp3" },
+  { title: "Mellohi",          file: "https://files.catbox.moe/01nyf6.mp3" },
+  { title: "Blocks",           file: "https://files.catbox.moe/774r6c.mp3" },
+  { title: "Chirp",            file: "https://files.catbox.moe/vej0p2.mp3" },
+  { title: "Far",              file: "https://files.catbox.moe/4lso48.mp3" },
+  { title: "Thirteen",         file: "https://files.catbox.moe/rccq8x.mp3" },
+  { title: "Cat",              file: "https://files.catbox.moe/0x3s18.mp3" },
+  { title: "Dog",              file: "https://files.catbox.moe/ixdit5.mp3" }
 ];
